@@ -1,10 +1,11 @@
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class InventoryCell : MonoBehaviour, IDropHandler
+public class InventoryCell : MonoBehaviour, IDropHandler, IBeginDragHandler
 {
     #region [PrivateVars]
 
+    private InventoryItem currentItem;
     private RectTransform rectTransform;
 
     #endregion
@@ -21,7 +22,15 @@ public class InventoryCell : MonoBehaviour, IDropHandler
             return;
         }
 
+        eventData.pointerDrag.TryGetComponent(out InventoryItem item);
+        currentItem = item;
+
         eventData.pointerDrag.TryGetComponent(out RectTransform pointerTransform);
         pointerTransform.anchoredPosition = rectTransform.anchoredPosition;
+    }
+
+    public void OnBeginDrag(PointerEventData eventData)
+    {
+        currentItem = null;
     }
 }
